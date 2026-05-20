@@ -2,6 +2,18 @@ let row = 9;
 let col = 9;
 let table = [];
 
+const direction = [
+  [0, 0],
+  [0, 1],
+  [0, 2],
+  [1, 0],
+  [1, 1],
+  [1, 2],
+  [2, 0],
+  [2, 1],
+  [2, 2],
+];
+
 for (let i = 0; i < row; i++) {
   const currentrow = [];
   for (let j = 0; j < col; j++) {
@@ -59,6 +71,19 @@ function validPosition(r, c, numchoice) {
       }
       if (j == c && table[i][j].value == numchoice) {
         val = false;
+      }
+      for (let k = 0; k < direction.length; k++) {
+        let a,
+          b = direction[k];
+        if (
+          i + a <= 8 &&
+          i + a > 0 &&
+          j + b <= 8 &&
+          j + b > 0 &&
+          table[i + a][j + b].value == numchoice
+        ) {
+          val = false;
+        }
       }
     }
   }
