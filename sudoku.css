@@ -3,13 +3,20 @@ body {
   align-items: center;
   background: linear-gradient(to right, rgb(232, 15, 192), rgb(246, 35, 35));
   display: flex;
+  flex-direction: column;
 }
 
 #block {
   display: grid;
   grid-template-columns: repeat(9, auto);
-  margin: 150px;
+  margin: 50px;
   border: 1px solid black;
+}
+
+#buttons {
+  display: flex;
+  justify-content: center;
+  max-width: 360px;
 }
 
 .cell {
@@ -21,18 +28,35 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 15px;
+  border: 1px solid black;
 }
 
 .cell.border-right {
-  box-shadow: inset -2px 0 0 0 #000;
+  box-shadow: inset -1px 0 0 0 #000;
 }
 
 .cell.border-bottom {
-  box-shadow: inset 0 -2px 0 0 #000;
+  box-shadow: inset 0 -1px 0 0 #000;
 }
 
 .cell.border-right.border-bottom {
   box-shadow:
-    inset -2px 0 0 0 #000,
-    inset 0 -2px 0 0 #000;
+    inset -1px 0 0 0 #000,
+    inset 0 -1px 0 0 #000;
+}
+
+#buttons button {
+  padding: 15px 15px;
+  margin: 10px;
+  font-size: 20px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+#buttons button:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+#buttons button:active {
+  transform: scale(0.9);
 }

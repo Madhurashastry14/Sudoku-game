@@ -73,13 +73,12 @@ function validPosition(r, c, numchoice) {
         val = false;
       }
       for (let k = 0; k < direction.length; k++) {
-        let a,
-          b = direction[k];
+        let [a, b] = direction[k];
         if (
           i + a <= 8 &&
-          i + a > 0 &&
+          i + a >= 0 &&
           j + b <= 8 &&
-          j + b > 0 &&
+          j + b >= 0 &&
           table[i + a][j + b].value == numchoice
         ) {
           val = false;
@@ -90,4 +89,20 @@ function validPosition(r, c, numchoice) {
   return val;
 }
 
-// document.getElementById("box").addEventListener("click", function (event) {});
+document.getElementById("block").addEventListener("click", function (event) {
+  const cell = event.target;
+  let r = Number(cell.dataset.row);
+  let c = Number(cell.dataset.col);
+  selectedCell = cell;
+  selectedRow = r;
+  selectedCol = c;
+  cell.style.background = "#9EC3FF";
+});
+
+document.getElementById("buttons").addEventListener("click", function (event) {
+  const temp = event.target;
+  if (!table[selectedRow][selectedCol].placed) {
+    table[selectedRow][selectedCol].value = temp.innerHTML;
+    selectedCell.textContent = temp.innerHTML;
+  }
+});
