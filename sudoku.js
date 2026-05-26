@@ -58,6 +58,7 @@ function placeElements() {
       table[r][c].placed = true;
       table[r][c].value = num;
       cell.textContent = num;
+      cell.style.background = "#caccd0";
       placedCount++;
     }
   }
@@ -126,25 +127,28 @@ document.getElementById("reset").addEventListener("click", () => {
       table[i][j].placed = false;
       table[i][j].value = 0;
       cell.textContent = "";
+      cell.style.background = "white";
     }
   }
   placedCount = 0;
   placeElements();
 });
-// document.getElementById("block").addEventListener("click", function (event) {
-//   const cell = event.target;
-//   let r = Number(cell.dataset.row);
-//   let c = Number(cell.dataset.col);
-//   selectedCell = cell;
-//   selectedRow = r;
-//   selectedCol = c;
-//   cell.style.background = "#9EC3FF";
-// });
 
-// document.getElementById("buttons").addEventListener("click", function (event) {
-//   const temp = event.target;
-//   if (!table[selectedRow][selectedCol].placed) {
-//     table[selectedRow][selectedCol].value = temp.innerHTML;
-//     selectedCell.textContent = temp.innerHTML;
-//   }
-// });
+document.getElementById("block").addEventListener("click", function (event) {
+  const cell = event.target;
+  let r = Number(cell.dataset.row);
+  let c = Number(cell.dataset.col);
+  selectedCell = cell;
+  selectedRow = r;
+  selectedCol = c;
+  cell.style.background = "#9EC3FF";
+});
+document.getElementById("buttons").addEventListener("click", function (event) {
+  const temp = event.target;
+  if (!table[selectedRow][selectedCol].placed) {
+    table[selectedRow][selectedCol].value = temp.innerHTML;
+    selectedCell.textContent = temp.innerHTML;
+    let cell = document.getElementById(`${selectedRow}-${selectedCol}`);
+    cell.style.background = "white";
+  }
+});
