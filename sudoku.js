@@ -118,6 +118,19 @@ function solve(row, col) {
   }
   return false;
 }
+
+document.getElementById("reset").addEventListener("click", () => {
+  for (let i = 0; i < row; i++) {
+    for (let j = 0; j < col; j++) {
+      let cell = document.getElementById(`${i}-${j}`);
+      table[i][j].placed = false;
+      table[i][j].value = 0;
+      cell.textContent = "";
+    }
+  }
+  placedCount = 0;
+  placeElements();
+});
 // document.getElementById("block").addEventListener("click", function (event) {
 //   const cell = event.target;
 //   let r = Number(cell.dataset.row);

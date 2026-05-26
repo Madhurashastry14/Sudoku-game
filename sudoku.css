@@ -78,3 +78,21 @@ body {
   transform: scale(0.95);
   cursor: pointer;
 }
+
+#reset {
+  padding: 15px 20px;
+  margin: 10px;
+  font-size: 20px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+#reset:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+#reset:active {
+  transform: scale(0.95);
+  cursor: pointer;
+}
