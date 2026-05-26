@@ -42,67 +42,96 @@ for (let i = 0; i < row; i++) {
     box.appendChild(cell);
   }
 }
-let countElements = Math.floor(Math.random() * 81);
 
+let countElements = 20;
+let choice = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+let placedCount = 0;
 for (let i = 0; i < countElements; i++) {
-  let choice = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  let numchoice = choice[Math.floor(Math.random() * choice.length)];
-  placeElements(numchoice);
+  placeElements();
 }
-
-function placeElements(numchoice) {
+function placeElements() {
+  if (placedCount >= countElements) return;
   let r = Math.floor(Math.random() * row);
   let c = Math.floor(Math.random() * col);
+  let num = choice[Math.floor(Math.random() * choice.length)];
   let cell = document.getElementById(`${r}-${c}`);
-
-  if (validPosition(r, c, numchoice)) {
+  if (!table[r][c].placed && validPosition(r, c, num)) {
     table[r][c].placed = true;
-    table[r][c].value = numchoice;
-    cell.textContent = numchoice;
-  }
+    table[r][c].value = num;
+    cell.textContent = num;
+    placedCount++;
+  } else placeElements();
 }
 
 function validPosition(r, c, numchoice) {
-  let val = true;
-  for (let i = 0; i < row; i++) {
-    for (let j = 0; j < col; j++) {
-      if (i == r && table[i][j].value == numchoice) {
-        val = false;
-      }
-      if (j == c && table[i][j].value == numchoice) {
-        val = false;
-      }
-      for (let k = 0; k < direction.length; k++) {
-        let [a, b] = direction[k];
-        if (
-          i + a <= 8 &&
-          i + a >= 0 &&
-          j + b <= 8 &&
-          j + b >= 0 &&
-          table[i + a][j + b].value == numchoice
-        ) {
-          val = false;
-        }
-      }
+  for (let j = 0; j < col; j++) {
+    if (table[r][j].value == numchoice) {
+      return false;
     }
   }
-  return val;
-}
 
-document.getElementById("block").addEventListener("click", function (event) {
-  const cell = event.target;
-  let r = Number(cell.dataset.row);
-  let c = Number(cell.dataset.col);
-  selectedCell = cell;
-  selectedRow = r;
-  selectedCol = c;
-  cell.style.background = "#9EC3FF";
-});
-
-document.getElementById("buttons").addEventListener("click", function (event) {
-  const temp = event.target;
-  if (!table[selectedRow][selectedCol].placed) {
-    table[selectedRow][selectedCol].value = temp.innerHTML;
-    selectedCell.textContent = temp.innerHTML;
+  for (let i = 0; i < row; i++) {
+    if (table[i][c].value == numchoice) {
+      return false;
+    }
   }
+
+  let boxRow = Math.floor(r / 3) * 3;
+  let boxCol = Math.floor(c / 3) * 3;
+
+  for (let k = 0; k < direction.length; k++) {
+    let [a, b] = direction[k];
+    if (table[boxRow + a][boxCol + b].value == numchoice) {
+      return false;
+    }
+  }
+
+  return true;
+}
+document.getElementById("solve").addEventListener("click", () => {
+  solve(0, 0);
 });
+
+function solve(row, col) {
+  if (row == 9) {
+    return true;
+  }
+  if (col == 9) {
+    return solve(row + 1, 0);
+  }
+  if (table[row][col].placed) {
+    return solve(row, col + 1);
+  }
+  let cell = document.getElementById(`${row}-${col}`);
+  for (let i = 1; i <= choice.length; i++) {
+    if (validPosition(row, col, i)) {
+      table[row][col].placed = true;
+      table[row][col].value = i;
+      cell.textContent = i;
+      if (solve(row, col + 1)) {
+        return true;
+      }
+      table[row][col].value = 0;
+      cell.textContent = "";
+      table[row][col].placed = false;
+    }
+  }
+  return false;
+}
+// document.getElementById("block").addEventListener("click", function (event) {
+//   const cell = event.target;
+//   let r = Number(cell.dataset.row);
+//   let c = Number(cell.dataset.col);
+//   selectedCell = cell;
+//   selectedRow = r;
+//   selectedCol = c;
+//   cell.style.background = "#9EC3FF";
+// });
+
+// document.getElementById("buttons").addEventListener("click", function (event) {
+//   const temp = event.target;
+//   if (!table[selectedRow][selectedCol].placed) {
+//     table[selectedRow][selectedCol].value = temp.innerHTML;
+//     selectedCell.textContent = temp.innerHTML;
+//   }
+// });
