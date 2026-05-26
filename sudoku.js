@@ -46,21 +46,21 @@ for (let i = 0; i < row; i++) {
 let countElements = 20;
 let choice = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let placedCount = 0;
-for (let i = 0; i < countElements; i++) {
-  placeElements();
-}
+placeElements();
 function placeElements() {
   if (placedCount >= countElements) return;
-  let r = Math.floor(Math.random() * row);
-  let c = Math.floor(Math.random() * col);
-  let num = choice[Math.floor(Math.random() * choice.length)];
-  let cell = document.getElementById(`${r}-${c}`);
-  if (!table[r][c].placed && validPosition(r, c, num)) {
-    table[r][c].placed = true;
-    table[r][c].value = num;
-    cell.textContent = num;
-    placedCount++;
-  } else placeElements();
+  while (placedCount < countElements) {
+    let r = Math.floor(Math.random() * row);
+    let c = Math.floor(Math.random() * col);
+    let num = choice[Math.floor(Math.random() * choice.length)];
+    let cell = document.getElementById(`${r}-${c}`);
+    if (!table[r][c].placed && validPosition(r, c, num)) {
+      table[r][c].placed = true;
+      table[r][c].value = num;
+      cell.textContent = num;
+      placedCount++;
+    }
+  }
 }
 
 function validPosition(r, c, numchoice) {
