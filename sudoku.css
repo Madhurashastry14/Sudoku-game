@@ -60,3 +60,21 @@ body {
 #buttons button:active {
   transform: scale(0.9);
 }
+
+#solve {
+  padding: 15px 20px;
+  margin: 10px;
+  font-size: 20px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+#solve:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+#solve:active {
+  transform: scale(0.95);
+  cursor: pointer;
+}
