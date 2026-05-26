@@ -1,7 +1,6 @@
 let row = 9;
 let col = 9;
 let table = [];
-
 const direction = [
   [0, 0],
   [0, 1],
@@ -20,6 +19,7 @@ for (let i = 0; i < row; i++) {
     currentrow.push({
       placed: false,
       value: 0,
+      temp: false,
     });
   }
   table.push(currentrow);
@@ -43,7 +43,7 @@ for (let i = 0; i < row; i++) {
   }
 }
 
-let countElements = 20;
+let countElements = 10;
 let choice = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let placedCount = 0;
 placeElements();
@@ -54,16 +54,14 @@ function placeElements() {
     let c = Math.floor(Math.random() * col);
     let num = choice[Math.floor(Math.random() * choice.length)];
     let cell = document.getElementById(`${r}-${c}`);
-    if (!table[r][c].placed && validPosition(r, c, num)) {
-      table[r][c].placed = true;
+    if (!table[r][c].temp && validPosition(r, c, num)) {
+      table[r][c].temp = true;
       table[r][c].value = num;
-      cell.textContent = num;
-      cell.style.background = "#caccd0";
       placedCount++;
     }
   }
+  solve(0, 0);
 }
-
 function validPosition(r, c, numchoice) {
   for (let j = 0; j < col; j++) {
     if (table[r][j].value == numchoice) {
@@ -90,9 +88,20 @@ function validPosition(r, c, numchoice) {
   return true;
 }
 document.getElementById("solve").addEventListener("click", () => {
-  solve(0, 0);
+  displayAll();
 });
 
+function displayAll() {
+  for (let i = 0; i < row; i++) {
+    for (let j = 0; j < col; j++) {
+      let cell = document.getElementById(`${i}-${j}`);
+      if (table[i][j].temp) {
+        cell.textContent = table[i][j].value;
+        table[i][j].placed;
+      }
+    }
+  }
+}
 function solve(row, col) {
   if (row == 9) {
     return true;
@@ -100,30 +109,49 @@ function solve(row, col) {
   if (col == 9) {
     return solve(row + 1, 0);
   }
-  if (table[row][col].placed) {
+  if (table[row][col].temp) {
     return solve(row, col + 1);
   }
   let cell = document.getElementById(`${row}-${col}`);
   for (let i = 1; i <= choice.length; i++) {
     if (validPosition(row, col, i)) {
-      table[row][col].placed = true;
+      table[row][col].temp = true;
       table[row][col].value = i;
-      cell.textContent = i;
       if (solve(row, col + 1)) {
         return true;
       }
       table[row][col].value = 0;
-      cell.textContent = "";
-      table[row][col].placed = false;
+      table[row][col].temp = false;
     }
   }
   return false;
+}
+let displayCount = 30;
+let displayedCount = 0;
+
+display();
+function display() {
+  while (displayedCount < displayCount) {
+    let r = Math.floor(Math.random() * row);
+    let c = Math.floor(Math.random() * col);
+    let cell = document.getElementById(`${r}-${c}`);
+    if (table[r][c].placed) {
+      return display();
+    }
+    if (table[r][c].temp) {
+      cell.textContent = table[r][c].value;
+      table[r][c].placed = true;
+      cell.style.background = "#caccd0";
+      displayedCount++;
+    }
+  }
 }
 
 document.getElementById("reset").addEventListener("click", () => {
   for (let i = 0; i < row; i++) {
     for (let j = 0; j < col; j++) {
       let cell = document.getElementById(`${i}-${j}`);
+      table[i][j].temp = false;
       table[i][j].placed = false;
       table[i][j].value = 0;
       cell.textContent = "";
@@ -132,6 +160,8 @@ document.getElementById("reset").addEventListener("click", () => {
   }
   placedCount = 0;
   placeElements();
+  displayedCount = 0;
+  display();
 });
 
 document.getElementById("block").addEventListener("click", function (event) {
