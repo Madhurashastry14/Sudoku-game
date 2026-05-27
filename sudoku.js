@@ -1,6 +1,7 @@
 let row = 9;
 let col = 9;
 let table = [];
+let result = document.getElementById("result");
 const direction = [
   [0, 0],
   [0, 1],
@@ -127,6 +128,7 @@ function solve(row, col) {
   return false;
 }
 let displayCount = 30;
+let numberPlaced = 30;
 let displayedCount = 0;
 
 display();
@@ -155,9 +157,11 @@ document.getElementById("reset").addEventListener("click", () => {
       table[i][j].placed = false;
       table[i][j].value = 0;
       cell.textContent = "";
-      cell.style.background = "white";
+      cell.style.background = "";
     }
   }
+  result.textContent = "";
+  numberPlaced = 30;
   placedCount = 0;
   placeElements();
   displayedCount = 0;
@@ -166,19 +170,49 @@ document.getElementById("reset").addEventListener("click", () => {
 
 document.getElementById("block").addEventListener("click", function (event) {
   const cell = event.target;
+  if (!cell.dataset.row) return;
   let r = Number(cell.dataset.row);
   let c = Number(cell.dataset.col);
   selectedCell = cell;
   selectedRow = r;
   selectedCol = c;
-  cell.style.background = "#9EC3FF";
+  if (table[r][c].placed) return;
+  for (let i = 0; i < row; i++) {
+    for (let j = 0; j < col; j++) {
+      let tempCell = document.getElementById(`${i}-${j}`);
+      if (tempCell.style.background == "rgb(158, 195, 255)") {
+        tempCell.style.background = "";
+      }
+    }
+  }
+  if (cell.style.background == "") cell.style.background = "#9EC3FF";
+  else cell.style.background = "";
 });
+
 document.getElementById("buttons").addEventListener("click", function (event) {
   const temp = event.target;
+  if (temp.tagName != "BUTTON") return;
+  let numNow = Number(temp.textContent);
+
   if (!table[selectedRow][selectedCol].placed) {
-    table[selectedRow][selectedCol].value = temp.innerHTML;
-    selectedCell.textContent = temp.innerHTML;
-    let cell = document.getElementById(`${selectedRow}-${selectedCol}`);
-    cell.style.background = "white";
+    table[selectedRow][selectedCol].value = 0;
+    if (validPosition(selectedRow, selectedCol, numNow)) {
+      table[selectedRow][selectedCol].value = numNow;
+      selectedCell.textContent = numNow;
+      selectedCell.style.background = "";
+      console.log(numberPlaced);
+      numberPlaced++;
+      console.log(numberPlaced);
+    } else {
+      selectedCell.textContent = numNow;
+      selectedCell.style.background = "#f36262";
+    }
   }
+  win();
 });
+
+function win() {
+  if (numberPlaced == 81) {
+    result.innerHTML = "You Won!";
+  }
+}
