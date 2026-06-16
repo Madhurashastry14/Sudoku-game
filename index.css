@@ -1,0 +1,31 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #d9f9df;
+  flex-wrap: wrap;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20rem;
+}
+
+#play {
+  padding: 20px 30px;
+  border: 1px solid black;
+  border-radius: 20px;
+  font-size: 25px;
+  background: #aee2ff;
+}
+
+#play:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+#play:active {
+  transform: scale(0.95);
+  cursor: pointer;
+}
