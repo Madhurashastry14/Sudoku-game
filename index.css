@@ -5,16 +5,63 @@ body {
   background: #d9f9df;
   flex-wrap: wrap;
   min-height: 90vh;
+  flex-direction: column;
 }
 
 #container {
   display: flex;
   flex-direction: column;
-  gap: 20rem;
+  align-items: center;
+  gap: 0;
+}
+
+#block {
+  display: grid;
+  grid-template-columns: repeat(3, 48px);
+  border-radius: 8px;
+  margin-bottom: 24px;
+  border: 1px solid black;
+}
+
+.cell {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 17px;
+  font-family: "EB Garamond", Georgia, serif;
+  font-weight: 700;
+  border: 1px solid black;
+}
+
+#text {
+  font-family: "EB Garamond", Georgia, serif;
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+#divider {
+  width: 240px;
+  border: none;
+  border-top: 1px solid #2a3450;
+  margin: 10px 0;
+}
+
+#subtext {
+  font-size: 11px;
+  color: #6b7894;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-weight: 400;
+  margin-bottom: 22px;
 }
 
 #play {
-  padding: 20px 30px;
+  padding: 20px 70px;
   border: 1px solid black;
   border-radius: 20px;
   font-size: 25px;
