@@ -1,7 +1,9 @@
 let row = 9;
 let col = 9;
+
+let timer = true;
+
 let table = [];
-let result = document.getElementById("result");
 const direction = [
   [0, 0],
   [0, 1],
@@ -13,6 +15,8 @@ const direction = [
   [2, 1],
   [2, 2],
 ];
+
+const box = document.getElementById("block");
 
 for (let i = 0; i < row; i++) {
   const currentrow = [];
@@ -26,7 +30,6 @@ for (let i = 0; i < row; i++) {
   table.push(currentrow);
 }
 
-const box = document.getElementById("block");
 for (let i = 0; i < row; i++) {
   for (let j = 0; j < col; j++) {
     const cell = document.createElement("button");
@@ -44,7 +47,7 @@ for (let i = 0; i < row; i++) {
   }
 }
 
-let countElements = 10;
+let countElements = 5;
 let choice = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let placedCount = 0;
 placeElements();
@@ -61,8 +64,11 @@ function placeElements() {
       placedCount++;
     }
   }
+  //after placing 5 elements solves the whole board.
   solve(0, 0);
 }
+
+//to check valid cell
 function validPosition(r, c, numchoice) {
   for (let j = 0; j < col; j++) {
     if (table[r][j].value == numchoice) {
@@ -88,21 +94,8 @@ function validPosition(r, c, numchoice) {
 
   return true;
 }
-document.getElementById("solve").addEventListener("click", () => {
-  displayAll();
-});
 
-function displayAll() {
-  for (let i = 0; i < row; i++) {
-    for (let j = 0; j < col; j++) {
-      let cell = document.getElementById(`${i}-${j}`);
-      if (table[i][j].temp) {
-        cell.textContent = table[i][j].value;
-        table[i][j].placed;
-      }
-    }
-  }
-}
+//solve function to solve the board recursively
 function solve(row, col) {
   if (row == 9) {
     return true;
@@ -127,11 +120,32 @@ function solve(row, col) {
   }
   return false;
 }
-let displayCount = 30;
-let numberPlaced = 30;
+
+// solve whole board
+document.getElementById("solve").addEventListener("click", () => {
+  displayAll();
+});
+
+//displays whole board
+function displayAll() {
+  for (let i = 0; i < row; i++) {
+    for (let j = 0; j < col; j++) {
+      let cell = document.getElementById(`${i}-${j}`);
+      if (table[i][j].temp) {
+        cell.textContent = table[i][j].value;
+        table[i][j].placed;
+      }
+    }
+  }
+}
+
+let displayCount = 79;
+let numberPlaced = 0;
 let displayedCount = 0;
 
 display();
+
+//display some numbers
 function display() {
   while (displayedCount < displayCount) {
     let r = Math.floor(Math.random() * row);
@@ -149,28 +163,10 @@ function display() {
   }
 }
 
-document.getElementById("reset").addEventListener("click", () => {
-  for (let i = 0; i < row; i++) {
-    for (let j = 0; j < col; j++) {
-      let cell = document.getElementById(`${i}-${j}`);
-      table[i][j].temp = false;
-      table[i][j].placed = false;
-      table[i][j].value = 0;
-      cell.textContent = "";
-      cell.style.background = "";
-    }
-  }
-  result.textContent = "";
-  numberPlaced = 30;
-  placedCount = 0;
-  placeElements();
-  displayedCount = 0;
-  display();
-});
-
+//when clicked in the sudoku block
 document.getElementById("block").addEventListener("click", function (event) {
+  if (!timer) return;
   const cell = event.target;
-
   if (!cell.dataset.row) return;
   let r = Number(cell.dataset.row);
   let c = Number(cell.dataset.col);
@@ -190,47 +186,215 @@ document.getElementById("block").addEventListener("click", function (event) {
   else cell.style.background = "";
 });
 
+let move = document.getElementById("movenum");
+//input number from keyboard
 document.addEventListener("keydown", function (event) {
-  let number = event.key;
-  if (number >= "1" && number <= "9") {
+  if (!timer) return;
+  let number = Number(event.key);
+  if (number >= 1 && number <= 9) {
     if (!table[selectedRow][selectedCol].placed) {
-      table[selectedRow][selectedCol].value = 0;
-      if (validPosition(selectedRow, selectedCol, number)) {
-        table[selectedRow][selectedCol].value = number;
+      if (table[selectedRow][selectedCol].value == number) {
+        table[selectedRow][selectedCol].placed = true;
         selectedCell.textContent = number;
         selectedCell.style.background = "";
         numberPlaced++;
+        move.innerHTML = numberPlaced;
       } else {
         selectedCell.textContent = number;
         selectedCell.style.background = "#f36262";
+        numberPlaced++;
+        move.innerHTML = numberPlaced;
       }
     }
   }
   win();
 });
 
+//input number from the given button
 document.getElementById("buttons").addEventListener("click", function (event) {
+  if (!timer) return;
   const temp = event.target;
   if (temp.tagName != "BUTTON") return;
   let numNow = Number(temp.textContent);
 
   if (!table[selectedRow][selectedCol].placed) {
-    table[selectedRow][selectedCol].value = 0;
-    if (validPosition(selectedRow, selectedCol, numNow)) {
-      table[selectedRow][selectedCol].value = numNow;
+    if (table[selectedRow][selectedCol].value == numNow) {
+      table[selectedRow][selectedCol].placed = true;
       selectedCell.textContent = numNow;
       selectedCell.style.background = "";
       numberPlaced++;
+      move.innerHTML = numberPlaced;
     } else {
       selectedCell.textContent = numNow;
       selectedCell.style.background = "#f36262";
+      numberPlaced++;
+      move.innerHTML = numberPlaced;
     }
   }
   win();
 });
 
+let result = document.getElementById("result");
+let result_text = document.getElementById("result-text");
+let result_subtext = document.getElementById("result-subtext");
+let result_time = document.getElementById("result-time-value");
+let result_moves = document.getElementById("result-moves-value");
+//win condition
 function win() {
-  if (numberPlaced == 81) {
-    result.innerHTML = "You Won!";
+  if (isBoardComplete()) {
+    result.style.display = "flex";
+    result.style.flexDirection = "column";
+    result_text.innerHTML = "You Won!";
+    result_subtext.innerHTML = "Sudoku Solved";
+    result_time.innerHTML =
+      document.getElementById("minute").innerHTML +
+      document.getElementById("second").innerHTML;
+    result_moves.innerHTML = numberPlaced;
+    timer = false;
+  }
+}
+
+//to check if the board is complete or not
+function isBoardComplete() {
+  for (let i = 0; i < row; i++) {
+    for (let j = 0; j < col; j++) {
+      if (!table[i][j].placed) {
+        console.log(table[i][j].placed);
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+//reset logic
+document.getElementById("reset").addEventListener("click", () => {
+  for (let i = 0; i < row; i++) {
+    for (let j = 0; j < col; j++) {
+      let cell = document.getElementById(`${i}-${j}`);
+      table[i][j].temp = false;
+      table[i][j].placed = false;
+      table[i][j].value = 0;
+      cell.textContent = "";
+      cell.style.background = "";
+    }
+  }
+
+  document.getElementById("minute").innerHTML = "00";
+  document.getElementById("second").innerHTML = ":00";
+  seconds = 0;
+  minute = 0;
+  mili = 0;
+  result.textContent = "";
+  numberPlaced = 0;
+  placedCount = 0;
+  placeElements();
+  displayedCount = 0;
+
+  result.style.display = "none";
+  result_text.innerHTML = "none";
+  result_subtext.innerHTML = "none";
+  result_time.innerHTML =
+    document.getElementById("minute").innerHTML +
+    document.getElementById("second").innerHTML;
+  result_moves.innerHTML = numberPlaced;
+
+  timer = true;
+  watch();
+
+  move.innerHTML = numberPlaced;
+  display();
+});
+
+let pausenow = document.getElementById("pause");
+document.getElementById("pause").addEventListener("click", () => {
+  if (pausenow.textContent == "Pause") {
+    timer = false;
+    pausenow.textContent = "Resume";
+  } else {
+    timer = true;
+    pausenow.textContent = "Pause";
+    watch();
+  }
+});
+
+let playagain = document.getElementById("playagain");
+let home = document.getElementById("home");
+
+//playagain (same as reset)
+playagain.addEventListener("click", () => {
+  for (let i = 0; i < row; i++) {
+    for (let j = 0; j < col; j++) {
+      let cell = document.getElementById(`${i}-${j}`);
+      table[i][j].temp = false;
+      table[i][j].placed = false;
+      table[i][j].value = 0;
+      cell.textContent = "";
+      cell.style.background = "";
+    }
+  }
+  result.style.display = "none";
+  document.getElementById("minute").innerHTML = "00";
+  document.getElementById("second").innerHTML = ":00";
+  seconds = 0;
+  minute = 0;
+  mili = 0;
+  numberPlaced = 0;
+  placedCount = 0;
+  placeElements();
+  displayedCount = 0;
+
+  result_text.innerHTML = "none";
+  result_subtext.innerHTML = "none";
+  result_time.innerHTML =
+    document.getElementById("minute").innerHTML +
+    document.getElementById("second").innerHTML;
+  result_moves.innerHTML = numberPlaced;
+  move.innerHTML = numberPlaced;
+
+  timer = true;
+  watch();
+
+  display();
+});
+
+//redirect to home
+home.addEventListener("click", () => {
+  window.location.href = "../index.html";
+});
+
+//timer logic
+let stopwatch = document.getElementById("stopwatch");
+let mili = 0;
+let seconds = 0;
+let minute = 0;
+watch();
+
+function watch() {
+  if (timer) {
+    mili++;
+    if (mili >= 60) {
+      seconds++;
+      mili = 0;
+    }
+    if (seconds >= 60) {
+      minute++;
+      seconds = 0;
+    }
+    if (minute >= 60) {
+      //over logic later
+    }
+    let min = minute;
+    let sec = seconds;
+
+    if (sec < 10) {
+      sec = "0" + sec;
+    }
+    if (min < 10) {
+      min = "0" + min;
+    }
+    document.getElementById("minute").innerHTML = min;
+    document.getElementById("second").innerHTML = ":" + sec;
+    setTimeout(watch, 10);
   }
 }

@@ -7,22 +7,61 @@
     <link rel="stylesheet" href="sudoku.css" />
   </head>
   <body>
-    <div id="block"></div>
-    <div id="buttons">
-      <button id="1">1</button>
-      <button id="2">2</button>
-      <button id="3">3</button>
-      <button id="4">4</button>
-      <button id="5">5</button>
-      <button id="6">6</button>
-      <button id="7">7</button>
-      <button id="8">8</button>
-      <button id="9">9</button>
-    </div>
-    <div>
-      <button id="solve">Solve</button>
-      <button id="reset">Reset</button>
-      <h1 id="result"></h1>
+    <div class="container">
+      <div id="topsection">
+        <div id="movesection">
+          <div id="Moves">Moves</div>
+          <div id="movenum">0</div>
+        </div>
+
+        <div id="timesection">
+          <div id="time">Time</div>
+          <div id="stopwatch">
+            <div id="minute">00:</div>
+            <div id="second">00</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="block"></div>
+      <div id="buttons">
+        <button id="1">1</button>
+        <button id="2">2</button>
+        <button id="3">3</button>
+        <button id="4">4</button>
+        <button id="5">5</button>
+        <button id="6">6</button>
+        <button id="7">7</button>
+        <button id="8">8</button>
+        <button id="9">9</button>
+      </div>
+
+      <div>
+        <button id="solve">Solve</button>
+        <button id="reset">Reset</button>
+        <button id="pause">Pause</button>
+
+        <div id="result" style="display: none">
+          <div id="result-text"></div>
+          <div id="result-subtext"></div>
+          <div id="result-content">
+            <div id="result-time">
+              <div id="label">Time</div>
+              <span id="result-time-value"></span>
+            </div>
+
+            <div id="result-moves">
+              <div id="label">Moves</div>
+              <span id="result-moves-value"></span>
+            </div>
+          </div>
+
+          <div id="options">
+            <div id="playagain">Play Again</div>
+            <div id="home">Home</div>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
   <script src="sudoku.js"></script>
