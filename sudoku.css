@@ -1,15 +1,16 @@
 body {
   justify-content: center;
   align-items: center;
-  background: linear-gradient(to right, rgb(232, 15, 192), rgb(246, 35, 35));
+  background: #aee2ff;
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
 }
 
 #block {
   display: grid;
   grid-template-columns: repeat(9, auto);
-  margin: 50px;
+  margin: 2%;
   border: 1px solid black;
 }
 
@@ -17,6 +18,7 @@ body {
   display: flex;
   justify-content: center;
   max-width: 360px;
+  flex-wrap: wrap;
 }
 
 .cell {

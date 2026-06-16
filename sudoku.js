@@ -170,6 +170,7 @@ document.getElementById("reset").addEventListener("click", () => {
 
 document.getElementById("block").addEventListener("click", function (event) {
   const cell = event.target;
+
   if (!cell.dataset.row) return;
   let r = Number(cell.dataset.row);
   let c = Number(cell.dataset.col);
@@ -189,6 +190,25 @@ document.getElementById("block").addEventListener("click", function (event) {
   else cell.style.background = "";
 });
 
+document.addEventListener("keydown", function (event) {
+  let number = event.key;
+  if (number >= "1" && number <= "9") {
+    if (!table[selectedRow][selectedCol].placed) {
+      table[selectedRow][selectedCol].value = 0;
+      if (validPosition(selectedRow, selectedCol, number)) {
+        table[selectedRow][selectedCol].value = number;
+        selectedCell.textContent = number;
+        selectedCell.style.background = "";
+        numberPlaced++;
+      } else {
+        selectedCell.textContent = number;
+        selectedCell.style.background = "#f36262";
+      }
+    }
+  }
+  win();
+});
+
 document.getElementById("buttons").addEventListener("click", function (event) {
   const temp = event.target;
   if (temp.tagName != "BUTTON") return;
@@ -200,9 +220,7 @@ document.getElementById("buttons").addEventListener("click", function (event) {
       table[selectedRow][selectedCol].value = numNow;
       selectedCell.textContent = numNow;
       selectedCell.style.background = "";
-      console.log(numberPlaced);
       numberPlaced++;
-      console.log(numberPlaced);
     } else {
       selectedCell.textContent = numNow;
       selectedCell.style.background = "#f36262";
