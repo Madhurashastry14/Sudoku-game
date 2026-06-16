@@ -4,9 +4,10 @@ body {
   align-items: center;
   background: #d9f9df;
   flex-wrap: wrap;
+  min-height: 90vh;
 }
 
-.container {
+#container {
   display: flex;
   flex-direction: column;
   gap: 20rem;
@@ -28,4 +29,37 @@ body {
 #play:active {
   transform: scale(0.95);
   cursor: pointer;
+}
+
+#loading {
+  width: 300px;
+  height: 30px;
+  border: 1px solid black;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes load {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+#loadcolor {
+  border-radius: 10px;
+  width: 0%;
+  height: 100%;
+  background: rgb(68, 207, 68);
+  animation: load 1s linear 1;
+}
+
+#loadingText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
 }
