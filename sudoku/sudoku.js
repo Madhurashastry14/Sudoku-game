@@ -139,7 +139,7 @@ function displayAll() {
   }
 }
 
-let displayCount = 79;
+let displayCount = 30;
 let numberPlaced = 0;
 let displayedCount = 0;
 
