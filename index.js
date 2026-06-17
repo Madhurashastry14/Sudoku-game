@@ -27,6 +27,7 @@ let loading = document.getElementById("loading");
 let text = document.getElementById("text");
 let subtext = document.getElementById("subtext");
 let divider = document.getElementById("divider");
+let level = document.getElementById("level");
 
 play.addEventListener("click", function () {
   loading.style.display = "flex";
@@ -35,6 +36,7 @@ play.addEventListener("click", function () {
   divider.style.display = "none";
   text.style.display = "none";
   play.style.display = "none";
+  level.style.display = "none";
   setTimeout(() => {
     window.location.href = "../sudoku/sudoku.html";
   }, 1000);

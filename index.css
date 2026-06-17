@@ -60,6 +60,29 @@ body {
   margin-bottom: 22px;
 }
 
+#level {
+  margin: 15px;
+}
+
+#level button {
+  padding: 15px 30px;
+  border: 1px solid black;
+  border-radius: 15px;
+  font-size: 15px;
+  background: #56946e;
+  margin: 5px;
+}
+
+#level button:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+#level button:active {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
 #play {
   padding: 20px 70px;
   border: 1px solid black;

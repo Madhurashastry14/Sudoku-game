@@ -47,13 +47,13 @@ for (let i = 0; i < row; i++) {
   }
 }
 
-let countElements = 5;
+let initialCount = 5;
 let choice = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let placedCount = 0;
 placeElements();
 function placeElements() {
-  if (placedCount >= countElements) return;
-  while (placedCount < countElements) {
+  if (placedCount >= initialCount) return;
+  while (placedCount < initialCount) {
     let r = Math.floor(Math.random() * row);
     let c = Math.floor(Math.random() * col);
     let num = choice[Math.floor(Math.random() * choice.length)];
@@ -121,8 +121,18 @@ function solve(row, col) {
   return false;
 }
 
+let result = document.getElementById("result");
+let result_text = document.getElementById("result-text");
+let result_subtext = document.getElementById("result-subtext");
+let result_time_value = document.getElementById("result-time-value");
+let result_moves_value = document.getElementById("result-moves-value");
+let result_time = document.getElementById("result-time");
+let result_moves = document.getElementById("result-moves");
+
 // solve whole board
 document.getElementById("solve").addEventListener("click", () => {
+  if (lost) return;
+  timer = false;
   displayAll();
 });
 
@@ -187,6 +197,8 @@ document.getElementById("block").addEventListener("click", function (event) {
 });
 
 let move = document.getElementById("movenum");
+let mistake = document.getElementById("mistakenum");
+let mistakecount = 0;
 //input number from keyboard
 document.addEventListener("keydown", function (event) {
   if (!timer) return;
@@ -199,20 +211,25 @@ document.addEventListener("keydown", function (event) {
         selectedCell.style.background = "";
         numberPlaced++;
         move.innerHTML = numberPlaced;
+        mistake.innerHTML = mistakecount + "/3";
       } else {
         selectedCell.textContent = number;
         selectedCell.style.background = "#f36262";
         numberPlaced++;
         move.innerHTML = numberPlaced;
+        mistakecount++;
+        mistake.innerHTML = mistakecount + "/3";
       }
     }
   }
   win();
+  lose();
 });
 
 //input number from the given button
 document.getElementById("buttons").addEventListener("click", function (event) {
   if (!timer) return;
+  if (lost) return;
   const temp = event.target;
   if (temp.tagName != "BUTTON") return;
   let numNow = Number(temp.textContent);
@@ -224,21 +241,20 @@ document.getElementById("buttons").addEventListener("click", function (event) {
       selectedCell.style.background = "";
       numberPlaced++;
       move.innerHTML = numberPlaced;
+      mistake.innerHTML = mistakecount + "/3";
     } else {
       selectedCell.textContent = numNow;
       selectedCell.style.background = "#f36262";
       numberPlaced++;
       move.innerHTML = numberPlaced;
+      mistakecount++;
+      mistake.innerHTML = mistakecount + "/3";
     }
   }
   win();
+  lose();
 });
 
-let result = document.getElementById("result");
-let result_text = document.getElementById("result-text");
-let result_subtext = document.getElementById("result-subtext");
-let result_time = document.getElementById("result-time-value");
-let result_moves = document.getElementById("result-moves-value");
 //win condition
 function win() {
   if (isBoardComplete()) {
@@ -246,10 +262,25 @@ function win() {
     result.style.flexDirection = "column";
     result_text.innerHTML = "You Won!";
     result_subtext.innerHTML = "Sudoku Solved";
-    result_time.innerHTML =
+    result_time_value.innerHTML =
       document.getElementById("minute").innerHTML +
       document.getElementById("second").innerHTML;
-    result_moves.innerHTML = numberPlaced;
+    result_moves_value.innerHTML = numberPlaced;
+    timer = false;
+  }
+}
+let lost = false;
+function lose() {
+  if (mistakecount >= 3) {
+    result.style.display = "flex";
+    result.style.flexDirection = "column";
+    result_text.innerHTML = "You lost!";
+    result_subtext.innerHTML = "Better luck next time";
+    result_time_value.innerHTML =
+      document.getElementById("minute").innerHTML +
+      document.getElementById("second").innerHTML;
+    result_moves_value.innerHTML = numberPlaced;
+    lost = true;
     timer = false;
   }
 }
@@ -259,7 +290,6 @@ function isBoardComplete() {
   for (let i = 0; i < row; i++) {
     for (let j = 0; j < col; j++) {
       if (!table[i][j].placed) {
-        console.log(table[i][j].placed);
         return false;
       }
     }
@@ -269,6 +299,7 @@ function isBoardComplete() {
 
 //reset logic
 document.getElementById("reset").addEventListener("click", () => {
+  if (lost) return;
   for (let i = 0; i < row; i++) {
     for (let j = 0; j < col; j++) {
       let cell = document.getElementById(`${i}-${j}`);
@@ -294,10 +325,15 @@ document.getElementById("reset").addEventListener("click", () => {
   result.style.display = "none";
   result_text.innerHTML = "none";
   result_subtext.innerHTML = "none";
-  result_time.innerHTML =
+  result_time_value.innerHTML =
     document.getElementById("minute").innerHTML +
     document.getElementById("second").innerHTML;
-  result_moves.innerHTML = numberPlaced;
+  result_moves_value.innerHTML = numberPlaced;
+  result_time.style.display = "none";
+  result_moves.style.display = "none";
+
+  mistakecount = 0;
+  lost = false;
 
   timer = true;
   watch();
@@ -308,6 +344,7 @@ document.getElementById("reset").addEventListener("click", () => {
 
 let pausenow = document.getElementById("pause");
 document.getElementById("pause").addEventListener("click", () => {
+  if (lost) return;
   if (pausenow.textContent == "Pause") {
     timer = false;
     pausenow.textContent = "Resume";
@@ -351,6 +388,9 @@ playagain.addEventListener("click", () => {
     document.getElementById("second").innerHTML;
   result_moves.innerHTML = numberPlaced;
   move.innerHTML = numberPlaced;
+
+  mistakecount = 0;
+  lost = false;
 
   timer = true;
   watch();

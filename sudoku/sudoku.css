@@ -68,16 +68,17 @@ body {
   border-radius: 5px;
 }
 #buttons button:hover {
-  transform: scale(1.1);
+  background: #ece7d5;
   cursor: pointer;
 }
 
 #buttons button:active {
-  transform: scale(0.9);
+  cursor: pointer;
 }
 
 #solve {
-  padding: 15px 20px;
+  width: 90px;
+  height: 55px;
   margin: 10px;
   font-size: 20px;
   border: 1px solid black;
@@ -85,17 +86,17 @@ body {
 }
 
 #solve:hover {
-  transform: scale(1.1);
+  background: #ece7d5;
   cursor: pointer;
 }
 
 #solve:active {
-  transform: scale(0.95);
   cursor: pointer;
 }
 
 #reset {
-  padding: 15px 20px;
+  width: 90px;
+  height: 55px;
   margin: 10px;
   font-size: 20px;
   border: 1px solid black;
@@ -103,17 +104,17 @@ body {
 }
 
 #reset:hover {
-  transform: scale(1.1);
+  background: #ece7d5;
   cursor: pointer;
 }
 
 #reset:active {
-  transform: scale(0.95);
   cursor: pointer;
 }
 
 #pause {
-  padding: 15px 20px;
+  width: 90px;
+  height: 55px;
   margin: 10px;
   font-size: 20px;
   border: 1px solid black;
@@ -121,12 +122,11 @@ body {
 }
 
 #pause:hover {
-  transform: scale(1.1);
+  background: #ece7d5;
   cursor: pointer;
 }
 
 #pause:active {
-  transform: scale(0.95);
   cursor: pointer;
 }
 #result {
@@ -233,9 +233,11 @@ body {
   width: 100%;
 }
 #timesection,
-#movesection {
+#movesection,
+#mistakesection {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 #stopwatch {
@@ -247,6 +249,8 @@ body {
 #movenum,
 #time,
 #minute,
-#second {
+#second,
+#mistakenum,
+#mistakes {
   font-size: 20px;
 }
