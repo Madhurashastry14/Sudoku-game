@@ -126,10 +126,8 @@ let result_text = document.getElementById("result-text");
 let result_subtext = document.getElementById("result-subtext");
 let result_time_value = document.getElementById("result-time-value");
 let result_moves_value = document.getElementById("result-moves-value");
-let result_time = document.getElementById("result-time");
-let result_moves = document.getElementById("result-moves");
 
-// solve whole board
+//  whole board
 document.getElementById("solve").addEventListener("click", () => {
   if (lost) return;
   timer = false;
@@ -143,7 +141,7 @@ function displayAll() {
       let cell = document.getElementById(`${i}-${j}`);
       if (table[i][j].temp) {
         cell.textContent = table[i][j].value;
-        table[i][j].placed;
+        table[i][j].placed = true;
       }
     }
   }
@@ -193,7 +191,8 @@ document.getElementById("block").addEventListener("click", function (event) {
     }
   }
   if (cell.style.background == "") cell.style.background = "#9EC3FF";
-  else cell.style.background = "";
+  else if ((cell.style.background = "#f36262"))
+    cell.style.background = "#f36262";
 });
 
 let move = document.getElementById("movenum");
@@ -204,22 +203,21 @@ document.addEventListener("keydown", function (event) {
   if (!timer) return;
   let number = Number(event.key);
   if (number >= 1 && number <= 9) {
-    if (!table[selectedRow][selectedCol].placed) {
-      if (table[selectedRow][selectedCol].value == number) {
-        table[selectedRow][selectedCol].placed = true;
-        selectedCell.textContent = number;
-        selectedCell.style.background = "";
-        numberPlaced++;
-        move.innerHTML = numberPlaced;
-        mistake.innerHTML = mistakecount + "/3";
-      } else {
-        selectedCell.textContent = number;
-        selectedCell.style.background = "#f36262";
-        numberPlaced++;
-        move.innerHTML = numberPlaced;
-        mistakecount++;
-        mistake.innerHTML = mistakecount + "/3";
-      }
+    table[selectedRow][selectedCol].value = 0;
+    if (validPosition(selectedRow, selectedCol, number)) {
+      table[selectedRow][selectedCol].value = number;
+      table[selectedRow][selectedCol].placed = true;
+      selectedCell.textContent = number;
+      selectedCell.style.background = "";
+      numberPlaced++;
+      move.innerHTML = numberPlaced;
+      mistake.innerHTML = mistakecount + "/3";
+    } else {
+      selectedCell.textContent = number;
+      selectedCell.style.background = "#f36262";
+      move.innerHTML = numberPlaced;
+      mistakecount++;
+      mistake.innerHTML = mistakecount + "/3";
     }
   }
   win();
@@ -233,23 +231,21 @@ document.getElementById("buttons").addEventListener("click", function (event) {
   const temp = event.target;
   if (temp.tagName != "BUTTON") return;
   let numNow = Number(temp.textContent);
-
-  if (!table[selectedRow][selectedCol].placed) {
-    if (table[selectedRow][selectedCol].value == numNow) {
-      table[selectedRow][selectedCol].placed = true;
-      selectedCell.textContent = numNow;
-      selectedCell.style.background = "";
-      numberPlaced++;
-      move.innerHTML = numberPlaced;
-      mistake.innerHTML = mistakecount + "/3";
-    } else {
-      selectedCell.textContent = numNow;
-      selectedCell.style.background = "#f36262";
-      numberPlaced++;
-      move.innerHTML = numberPlaced;
-      mistakecount++;
-      mistake.innerHTML = mistakecount + "/3";
-    }
+  table[selectedRow][selectedCol].value = 0;
+  if (validPosition(selectedRow, selectedCol, numNow)) {
+    table[selectedRow][selectedCol].value = numNow;
+    table[selectedRow][selectedCol].placed = true;
+    selectedCell.textContent = numNow;
+    selectedCell.style.background = "";
+    numberPlaced++;
+    move.innerHTML = numberPlaced;
+    mistake.innerHTML = mistakecount + "/3";
+  } else {
+    selectedCell.textContent = numNow;
+    selectedCell.style.background = "#f36262";
+    move.innerHTML = numberPlaced;
+    mistakecount++;
+    mistake.innerHTML = mistakecount + "/3";
   }
   win();
   lose();
@@ -297,9 +293,8 @@ function isBoardComplete() {
   return true;
 }
 
-//reset logic
-document.getElementById("reset").addEventListener("click", () => {
-  if (lost) return;
+//reset and playagain
+function newGame() {
   for (let i = 0; i < row; i++) {
     for (let j = 0; j < col; j++) {
       let cell = document.getElementById(`${i}-${j}`);
@@ -316,7 +311,6 @@ document.getElementById("reset").addEventListener("click", () => {
   seconds = 0;
   minute = 0;
   mili = 0;
-  result.textContent = "";
   numberPlaced = 0;
   placedCount = 0;
   placeElements();
@@ -325,14 +319,11 @@ document.getElementById("reset").addEventListener("click", () => {
   result.style.display = "none";
   result_text.innerHTML = "none";
   result_subtext.innerHTML = "none";
-  result_time_value.innerHTML =
-    document.getElementById("minute").innerHTML +
-    document.getElementById("second").innerHTML;
-  result_moves_value.innerHTML = numberPlaced;
-  result_time.style.display = "none";
-  result_moves.style.display = "none";
+  result_time_value.innerHTML = "none";
+  result_moves_value.innerHTML = "none";
 
   mistakecount = 0;
+  mistake.innerHTML = mistakecount + "/3";
   lost = false;
 
   timer = true;
@@ -340,7 +331,9 @@ document.getElementById("reset").addEventListener("click", () => {
 
   move.innerHTML = numberPlaced;
   display();
-});
+}
+//reset
+document.getElementById("reset").addEventListener("click", newGame);
 
 let pausenow = document.getElementById("pause");
 document.getElementById("pause").addEventListener("click", () => {
@@ -359,44 +352,7 @@ let playagain = document.getElementById("playagain");
 let home = document.getElementById("home");
 
 //playagain (same as reset)
-playagain.addEventListener("click", () => {
-  for (let i = 0; i < row; i++) {
-    for (let j = 0; j < col; j++) {
-      let cell = document.getElementById(`${i}-${j}`);
-      table[i][j].temp = false;
-      table[i][j].placed = false;
-      table[i][j].value = 0;
-      cell.textContent = "";
-      cell.style.background = "";
-    }
-  }
-  result.style.display = "none";
-  document.getElementById("minute").innerHTML = "00";
-  document.getElementById("second").innerHTML = ":00";
-  seconds = 0;
-  minute = 0;
-  mili = 0;
-  numberPlaced = 0;
-  placedCount = 0;
-  placeElements();
-  displayedCount = 0;
-
-  result_text.innerHTML = "none";
-  result_subtext.innerHTML = "none";
-  result_time.innerHTML =
-    document.getElementById("minute").innerHTML +
-    document.getElementById("second").innerHTML;
-  result_moves.innerHTML = numberPlaced;
-  move.innerHTML = numberPlaced;
-
-  mistakecount = 0;
-  lost = false;
-
-  timer = true;
-  watch();
-
-  display();
-});
+document.getElementById("playagain").addEventListener("click", newGame);
 
 //redirect to home
 home.addEventListener("click", () => {
@@ -413,7 +369,7 @@ watch();
 function watch() {
   if (timer) {
     mili++;
-    if (mili >= 60) {
+    if (mili >= 100) {
       seconds++;
       mili = 0;
     }
