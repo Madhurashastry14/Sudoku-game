@@ -29,15 +29,68 @@ let subtext = document.getElementById("subtext");
 let divider = document.getElementById("divider");
 let level = document.getElementById("level");
 
+let easy = document.getElementById("easy");
+let medium = document.getElementById("medium");
+let difficult = document.getElementById("difficult");
+
+let selectEasy = false;
+let selectMedium = false;
+let selectDifficult = false;
+
+easy.addEventListener("click", function () {
+  selectEasy = true;
+  easy.style.background = "#56946e";
+  medium.style.background = "#4eaa71";
+  difficult.style.background = "#4eaa71";
+});
+
+medium.addEventListener("click", function () {
+  selectMedium = true;
+  medium.style.background = "#56946e";
+  easy.style.background = "#4eaa71";
+  difficult.style.background = "#4eaa71";
+});
+
+difficult.addEventListener("click", function () {
+  selectDifficult = true;
+  difficult.style.background = "#56946e";
+  easy.style.background = "#4eaa71";
+  medium.style.background = "#4eaa71";
+});
+
 play.addEventListener("click", function () {
-  loading.style.display = "flex";
-  subtext.style.display = "none";
-  box.style.display = "none";
-  divider.style.display = "none";
-  text.style.display = "none";
-  play.style.display = "none";
-  level.style.display = "none";
-  setTimeout(() => {
-    window.location.href = "../sudoku/sudoku.html";
-  }, 1000);
+  if (selectEasy) {
+    loading.style.display = "flex";
+    subtext.style.display = "none";
+    box.style.display = "none";
+    divider.style.display = "none";
+    text.style.display = "none";
+    play.style.display = "none";
+    level.style.display = "none";
+    setTimeout(() => {
+      window.location.href = "../easy/easy.html";
+    }, 1000);
+  } else if (selectMedium) {
+    loading.style.display = "flex";
+    subtext.style.display = "none";
+    box.style.display = "none";
+    divider.style.display = "none";
+    text.style.display = "none";
+    play.style.display = "none";
+    level.style.display = "none";
+    setTimeout(() => {
+      window.location.href = "../medium/medium.html";
+    }, 1000);
+  } else if (selectDifficult) {
+    loading.style.display = "flex";
+    subtext.style.display = "none";
+    box.style.display = "none";
+    divider.style.display = "none";
+    text.style.display = "none";
+    play.style.display = "none";
+    level.style.display = "none";
+    setTimeout(() => {
+      window.location.href = "../difficult/difficult.html";
+    }, 1000);
+  }
 });
