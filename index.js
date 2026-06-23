@@ -68,7 +68,7 @@ play.addEventListener("click", function () {
     play.style.display = "none";
     level.style.display = "none";
     setTimeout(() => {
-      window.location.href = "../easy/easy.html";
+      window.location.href = "easy/easy.html";
     }, 1000);
   } else if (selectMedium) {
     loading.style.display = "flex";
@@ -79,7 +79,7 @@ play.addEventListener("click", function () {
     play.style.display = "none";
     level.style.display = "none";
     setTimeout(() => {
-      window.location.href = "../medium/medium.html";
+      window.location.href = "medium/medium.html";
     }, 1000);
   } else if (selectDifficult) {
     loading.style.display = "flex";
@@ -90,7 +90,7 @@ play.addEventListener("click", function () {
     play.style.display = "none";
     level.style.display = "none";
     setTimeout(() => {
-      window.location.href = "../difficult/difficult.html";
+      window.location.href = "difficult/difficult.html";
     }, 1000);
   }
 });
