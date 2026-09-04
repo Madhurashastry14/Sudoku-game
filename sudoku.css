@@ -16,15 +16,10 @@ body {
   gap: 10px;
 }
 
-#heading {
-  font-size: 20px;
-  font-weight: 800;
-}
-
 #block {
   display: grid;
   grid-template-columns: repeat(9, auto);
-  margin: 2%;
+  margin: 1%;
   border: 1px solid black;
 }
 
@@ -32,7 +27,7 @@ body {
   display: flex;
   justify-content: center;
   max-width: 360px;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
 }
 
 .cell {
@@ -67,9 +62,9 @@ body {
 }
 
 #buttons button {
-  padding: 15px 15px;
-  margin: 8px;
-  font-size: 20px;
+  padding: 13px 13px;
+  margin: 4px;
+  font-size: 18px;
   border: 1px solid black;
   border-radius: 5px;
 }
