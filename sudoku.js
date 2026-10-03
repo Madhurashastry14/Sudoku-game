@@ -1,3 +1,8 @@
+// 2. implementations of erase,undo and hint options.
+// 3. confirmation after clicking solve or reset.
+// 4. putcorrect comments.
+// 5. game over logic when timer hits 60 minutes.
+
 let row = 9;
 let col = 9;
 
@@ -127,6 +132,7 @@ let result_subtext = document.getElementById("result-subtext");
 let result_time_value = document.getElementById("result-time-value");
 let result_moves_value = document.getElementById("result-moves-value");
 
+let solvebutton = document.getElementById("solve");
 //  whole board
 document.getElementById("solve").addEventListener("click", () => {
   if (lost) return;
@@ -224,6 +230,7 @@ document.addEventListener("keydown", function (event) {
   lose();
 });
 
+let buttons = document.getElementById("buttons");
 //input number from the given button
 document.getElementById("buttons").addEventListener("click", function (event) {
   if (!timer) return;
@@ -334,18 +341,37 @@ function newGame() {
 }
 //reset
 document.getElementById("reset").addEventListener("click", newGame);
-
+let features = document.getElementById("features");
 let pausenow = document.getElementById("pause");
+let pausebox = document.getElementById("pausebox");
+
+let timeroption = document.getElementById("timesection");
+let mistakeoption = document.getElementById("mistakesection");
+let movesoption = document.getElementById("movesection");
 document.getElementById("pause").addEventListener("click", () => {
   if (lost) return;
-  if (pausenow.textContent == "Pause") {
-    timer = false;
-    pausenow.textContent = "Resume";
-  } else {
-    timer = true;
-    pausenow.textContent = "Pause";
-    watch();
-  }
+
+  timer = false;
+  box.style.display = "none";
+  buttons.style.display = "none";
+  features.style.display = "none";
+  timeroption.style.display = "none";
+  mistakeoption.style.display = "none";
+  movesoption.style.display = "none";
+  pausebox.style.display = "flex";
+});
+
+let resume = document.getElementById("resume");
+resume.addEventListener("click", () => {
+  timer = true;
+  box.style.display = "grid";
+  buttons.style.display = "flex";
+  features.style.display = "flex";
+  timeroption.style.display = "flex";
+  mistakeoption.style.display = "flex";
+  movesoption.style.display = "flex";
+  pausebox.style.display = "none";
+  watch();
 });
 
 let playagain = document.getElementById("playagain");
@@ -376,9 +402,6 @@ function watch() {
     if (seconds >= 60) {
       minute++;
       seconds = 0;
-    }
-    if (minute >= 60) {
-      //over logic later
     }
     let min = minute;
     let sec = seconds;

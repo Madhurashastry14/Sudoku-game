@@ -130,6 +130,24 @@ body {
 #pause:active {
   cursor: pointer;
 }
+
+#pausebox {
+  margin-top: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#pausetext {
+  font-size: 30px;
+}
+
+#resume {
+  padding: 10px;
+  font-size: 20px;
+  border-radius: 5px;
+}
+
 #result {
   padding: 2rem 2rem 1.5rem;
   background: white;
