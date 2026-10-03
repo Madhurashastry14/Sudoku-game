@@ -1,14 +1,11 @@
 // 2. implementations of erase,undo and hint options.
 // 3. confirmation after clicking solve or reset.
-// 4. putcorrect comments.
-// 5. game over logic when timer hits 60 minutes.
 
 let row = 9;
 let col = 9;
-
 let timer = true;
 
-let table = [];
+let table = []; // 9x9 box
 const direction = [
   [0, 0],
   [0, 1],
@@ -37,10 +34,10 @@ for (let i = 0; i < row; i++) {
 
 for (let i = 0; i < row; i++) {
   for (let j = 0; j < col; j++) {
-    const cell = document.createElement("button");
-    cell.dataset.row = i;
-    cell.dataset.col = j;
-    cell.id = `${i}-${j}`;
+    const cell = document.createElement("button"); // each cell of sudoku
+    cell.dataset.row = i; // row number
+    cell.dataset.col = j; // column number
+    cell.id = `${i}-${j}`; // id(row-col)
     cell.classList.add("cell");
     if (j == 2 || j == 5) {
       cell.classList.add("border-right");
@@ -57,6 +54,7 @@ let choice = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let placedCount = 0;
 placeElements();
 function placeElements() {
+  // place 5 ele initially in random row and column with random number
   if (placedCount >= initialCount) return;
   while (placedCount < initialCount) {
     let r = Math.floor(Math.random() * row);
@@ -76,12 +74,14 @@ function placeElements() {
 //to check valid cell
 function validPosition(r, c, numchoice) {
   for (let j = 0; j < col; j++) {
+    // to check if same value appears in column
     if (table[r][j].value == numchoice) {
       return false;
     }
   }
 
   for (let i = 0; i < row; i++) {
+    // to check if same value appears in row
     if (table[i][c].value == numchoice) {
       return false;
     }
@@ -90,6 +90,7 @@ function validPosition(r, c, numchoice) {
   let boxRow = Math.floor(r / 3) * 3;
   let boxCol = Math.floor(c / 3) * 3;
 
+  // to check if same value appears in 3x3 box
   for (let k = 0; k < direction.length; k++) {
     let [a, b] = direction[k];
     if (table[boxRow + a][boxCol + b].value == numchoice) {
@@ -111,7 +112,6 @@ function solve(row, col) {
   if (table[row][col].temp) {
     return solve(row, col + 1);
   }
-  let cell = document.getElementById(`${row}-${col}`);
   for (let i = 1; i <= choice.length; i++) {
     if (validPosition(row, col, i)) {
       table[row][col].temp = true;
@@ -126,15 +126,9 @@ function solve(row, col) {
   return false;
 }
 
-let result = document.getElementById("result");
-let result_text = document.getElementById("result-text");
-let result_subtext = document.getElementById("result-subtext");
-let result_time_value = document.getElementById("result-time-value");
-let result_moves_value = document.getElementById("result-moves-value");
-
 let solvebutton = document.getElementById("solve");
-//  whole board
-document.getElementById("solve").addEventListener("click", () => {
+
+solvebutton.addEventListener("click", () => {
   if (lost) return;
   timer = false;
   displayAll();
@@ -159,11 +153,11 @@ let displayedCount = 0;
 
 display();
 
-//display some numbers
+//display some numbers for sudoku problem
 function display() {
   while (displayedCount < displayCount) {
-    let r = Math.floor(Math.random() * row);
-    let c = Math.floor(Math.random() * col);
+    let r = Math.floor(Math.random() * row); // take random row
+    let c = Math.floor(Math.random() * col); // take random column
     let cell = document.getElementById(`${r}-${c}`);
     if (table[r][c].placed) {
       return display();
@@ -178,10 +172,10 @@ function display() {
 }
 
 //when clicked in the sudoku block
-document.getElementById("block").addEventListener("click", function (event) {
+box.addEventListener("click", function (event) {
   if (!timer) return;
   const cell = event.target;
-  if (!cell.dataset.row) return;
+  if (!cell.dataset.row) return; // if its not a row then return
   let r = Number(cell.dataset.row);
   let c = Number(cell.dataset.col);
   selectedCell = cell;
@@ -204,6 +198,7 @@ document.getElementById("block").addEventListener("click", function (event) {
 let move = document.getElementById("movenum");
 let mistake = document.getElementById("mistakenum");
 let mistakecount = 0;
+
 //input number from keyboard
 document.addEventListener("keydown", function (event) {
   if (!timer) return;
@@ -232,7 +227,7 @@ document.addEventListener("keydown", function (event) {
 
 let buttons = document.getElementById("buttons");
 //input number from the given button
-document.getElementById("buttons").addEventListener("click", function (event) {
+buttons.addEventListener("click", function (event) {
   if (!timer) return;
   if (lost) return;
   const temp = event.target;
@@ -258,6 +253,12 @@ document.getElementById("buttons").addEventListener("click", function (event) {
   lose();
 });
 
+let result = document.getElementById("result");
+let result_text = document.getElementById("result-text");
+let result_subtext = document.getElementById("result-subtext");
+let result_time_value = document.getElementById("result-time-value");
+let result_moves_value = document.getElementById("result-moves-value");
+
 //win condition
 function win() {
   if (isBoardComplete()) {
@@ -272,6 +273,7 @@ function win() {
     timer = false;
   }
 }
+
 let lost = false;
 function lose() {
   if (mistakecount >= 3) {
@@ -315,9 +317,7 @@ function newGame() {
 
   document.getElementById("minute").innerHTML = "00";
   document.getElementById("second").innerHTML = ":00";
-  seconds = 0;
-  minute = 0;
-  mili = 0;
+  totalsec = 0;
   numberPlaced = 0;
   placedCount = 0;
   placeElements();
@@ -332,9 +332,7 @@ function newGame() {
   mistakecount = 0;
   mistake.innerHTML = mistakecount + "/3";
   lost = false;
-
   timer = true;
-  watch();
 
   move.innerHTML = numberPlaced;
   display();
@@ -371,7 +369,6 @@ resume.addEventListener("click", () => {
   mistakeoption.style.display = "flex";
   movesoption.style.display = "flex";
   pausebox.style.display = "none";
-  watch();
 });
 
 let playagain = document.getElementById("playagain");
@@ -386,34 +383,38 @@ home.addEventListener("click", () => {
 });
 
 //timer logic
-let stopwatch = document.getElementById("stopwatch");
-let mili = 0;
-let seconds = 0;
-let minute = 0;
-watch();
+let totalsec = 0;
 
 function watch() {
-  if (timer) {
-    mili++;
-    if (mili >= 100) {
-      seconds++;
-      mili = 0;
-    }
-    if (seconds >= 60) {
-      minute++;
-      seconds = 0;
-    }
-    let min = minute;
-    let sec = seconds;
+  if (!timer) return;
 
-    if (sec < 10) {
-      sec = "0" + sec;
-    }
-    if (min < 10) {
-      min = "0" + min;
-    }
-    document.getElementById("minute").innerHTML = min;
-    document.getElementById("second").innerHTML = ":" + sec;
-    setTimeout(watch, 10);
+  totalsec++;
+  const minutes = Math.floor(totalsec / 60);
+  const seconds = totalsec % 60;
+  document.getElementById("minute").innerHTML = String(minutes).padStart(
+    2,
+    "0",
+  );
+  document.getElementById("second").innerHTML =
+    ":" + String(seconds).padStart(2, "0");
+
+  if (totalsec == 60 * 60) {
+    timeup();
   }
 }
+
+function timeup() {
+  timer = false;
+
+  result.style.display = "flex";
+  result.style.flexDirection = "column";
+  result_text.innerHTML = "Time's Up!";
+  result_subtext.innerHTML = "You ran out of time.";
+  result_time_value.innerHTML =
+    document.getElementById("minute").innerHTML +
+    document.getElementById("second").innerHTML;
+  result_moves_value.innerHTML = numberPlaced;
+}
+
+// runs watch every second
+setInterval(watch, 1000);
