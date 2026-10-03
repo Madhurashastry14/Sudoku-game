@@ -130,6 +130,9 @@ let solvebutton = document.getElementById("solve");
 
 solvebutton.addEventListener("click", () => {
   if (lost) return;
+  const confirmsolve = confirm(
+    "Are you sure you want to solve the whole sudoku board?",
+  );
   timer = false;
   displayAll();
 });
@@ -338,7 +341,10 @@ function newGame() {
   display();
 }
 //reset
-document.getElementById("reset").addEventListener("click", newGame);
+document.getElementById("reset").addEventListener("click", () => {
+  const confirmreset = confirm("Are you sure you want to reset?");
+  newGame();
+});
 let features = document.getElementById("features");
 let pausenow = document.getElementById("pause");
 let pausebox = document.getElementById("pausebox");
