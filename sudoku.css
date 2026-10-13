@@ -16,6 +16,35 @@ body {
   gap: 10px;
 }
 
+#board {
+  display: flex;
+  position: relative;
+}
+
+#game-controls {
+  left: calc(100% + 30px);
+  position: absolute;
+  top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#hint,
+#undo,
+#erase {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid black;
+}
+
+#hint:hover,
+#undo:hover,
+#erase:hover {
+  background: #ece7d5;
+  cursor: pointer;
+}
+
 #block {
   display: grid;
   grid-template-columns: repeat(9, auto);
@@ -77,57 +106,29 @@ body {
   cursor: pointer;
 }
 
-#solve {
-  width: 90px;
-  height: 55px;
-  margin: 10px;
-  font-size: 20px;
-  border: 1px solid black;
-  border-radius: 5px;
+#bottomoption {
+  display: flex;
+  flex-direction: row;
+  /* gap: 20px; */
 }
 
-#solve:hover {
-  background: #ece7d5;
-  cursor: pointer;
-}
-
-#solve:active {
-  cursor: pointer;
-}
-
-#reset {
-  width: 90px;
-  height: 55px;
-  margin: 10px;
-  font-size: 20px;
-  border: 1px solid black;
-  border-radius: 5px;
-}
-
-#reset:hover {
-  background: #ece7d5;
-  cursor: pointer;
-}
-
-#reset:active {
-  cursor: pointer;
-}
-
+#solve,
+#reset,
 #pause {
+  font-size: 20px;
   width: 90px;
   height: 55px;
-  margin: 10px;
-  font-size: 20px;
   border: 1px solid black;
   border-radius: 5px;
+  margin: 10px;
+  position: relative;
 }
 
-#pause:hover {
+#solve:hover,
+#pause:hover,
+#reset:hover,
+#resume:hover {
   background: #ece7d5;
-  cursor: pointer;
-}
-
-#pause:active {
   cursor: pointer;
 }
 
@@ -146,6 +147,7 @@ body {
   padding: 10px;
   font-size: 20px;
   border-radius: 5px;
+  border: 1px solid black;
 }
 
 #result {
@@ -248,6 +250,7 @@ body {
 #topsection {
   display: flex;
   flex-direction: row;
+  align-self: flex-start;
   justify-content: space-between;
   width: 100%;
 }

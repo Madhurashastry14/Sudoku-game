@@ -1,6 +1,3 @@
-// 2. implementations of erase,undo and hint options.
-// 3. confirmation after clicking solve or reset.
-
 let row = 9;
 let col = 9;
 let timer = true;
@@ -27,6 +24,8 @@ for (let i = 0; i < row; i++) {
       placed: false,
       value: 0,
       temp: false,
+      given: false,
+      wrong: false,
     });
   }
   table.push(currentrow);
@@ -64,6 +63,7 @@ function placeElements() {
     if (!table[r][c].temp && validPosition(r, c, num)) {
       table[r][c].temp = true;
       table[r][c].value = num;
+      table[r][c].given = true;
       placedCount++;
     }
   }
@@ -133,6 +133,7 @@ solvebutton.addEventListener("click", () => {
   const confirmsolve = confirm(
     "Are you sure you want to solve the whole sudoku board?",
   );
+  if (confirmsolve == false) return;
   timer = false;
   displayAll();
 });
@@ -151,7 +152,7 @@ function displayAll() {
 }
 
 let displayCount = 45;
-let numberPlaced = 0;
+let MoveCount = 0;
 let displayedCount = 0;
 
 display();
@@ -168,11 +169,16 @@ function display() {
     if (table[r][c].temp) {
       cell.textContent = table[r][c].value;
       table[r][c].placed = true;
+      table[r][c].given = true;
       cell.style.background = "#caccd0";
       displayedCount++;
     }
   }
 }
+
+let hintbutton = document.getElementById("hint");
+let erasebutton = document.getElementById("erase");
+let undobutton = document.getElementById("undo");
 
 //when clicked in the sudoku block
 box.addEventListener("click", function (event) {
@@ -198,6 +204,21 @@ box.addEventListener("click", function (event) {
     cell.style.background = "#f36262";
 });
 
+erasebutton.addEventListener("click", () => {
+  if (!timer || lost) return;
+  if (!selectedCell) return;
+  const cell = table[selectedRow][selectedCol];
+  if (cell.given) return;
+  if (!cell.placed && !cell.wrong) return;
+  cell.value = 0;
+  cell.placed = false;
+  cell.wrong = false;
+  selectedCell.textContent = "";
+  selectedCell.style.background = "";
+  move.innerHTML = MoveCount;
+  mistake.innerHTML = mistakecount + "/3";
+});
+
 let move = document.getElementById("movenum");
 let mistake = document.getElementById("mistakenum");
 let mistakecount = 0;
@@ -211,15 +232,18 @@ document.addEventListener("keydown", function (event) {
     if (validPosition(selectedRow, selectedCol, number)) {
       table[selectedRow][selectedCol].value = number;
       table[selectedRow][selectedCol].placed = true;
+      table[selectedRow][selectedCol].wrong = false;
       selectedCell.textContent = number;
       selectedCell.style.background = "";
-      numberPlaced++;
-      move.innerHTML = numberPlaced;
+      MoveCount++;
+      move.innerHTML = MoveCount;
       mistake.innerHTML = mistakecount + "/3";
     } else {
       selectedCell.textContent = number;
+      table[selectedRow][selectedCol].wrong = true;
       selectedCell.style.background = "#f36262";
-      move.innerHTML = numberPlaced;
+      MoveCount++;
+      move.innerHTML = MoveCount;
       mistakecount++;
       mistake.innerHTML = mistakecount + "/3";
     }
@@ -240,15 +264,18 @@ buttons.addEventListener("click", function (event) {
   if (validPosition(selectedRow, selectedCol, numNow)) {
     table[selectedRow][selectedCol].value = numNow;
     table[selectedRow][selectedCol].placed = true;
+    table[selectedRow][selectedCol].wrong = false;
     selectedCell.textContent = numNow;
     selectedCell.style.background = "";
-    numberPlaced++;
-    move.innerHTML = numberPlaced;
+    MoveCount++;
+    move.innerHTML = MoveCount;
     mistake.innerHTML = mistakecount + "/3";
   } else {
     selectedCell.textContent = numNow;
+    table[selectedRow][selectedCol].wrong = true;
     selectedCell.style.background = "#f36262";
-    move.innerHTML = numberPlaced;
+    MoveCount++;
+    move.innerHTML = MoveCount;
     mistakecount++;
     mistake.innerHTML = mistakecount + "/3";
   }
@@ -272,7 +299,7 @@ function win() {
     result_time_value.innerHTML =
       document.getElementById("minute").innerHTML +
       document.getElementById("second").innerHTML;
-    result_moves_value.innerHTML = numberPlaced;
+    result_moves_value.innerHTML = MoveCount;
     timer = false;
   }
 }
@@ -287,7 +314,7 @@ function lose() {
     result_time_value.innerHTML =
       document.getElementById("minute").innerHTML +
       document.getElementById("second").innerHTML;
-    result_moves_value.innerHTML = numberPlaced;
+    result_moves_value.innerHTML = MoveCount;
     lost = true;
     timer = false;
   }
@@ -321,7 +348,7 @@ function newGame() {
   document.getElementById("minute").innerHTML = "00";
   document.getElementById("second").innerHTML = ":00";
   totalsec = 0;
-  numberPlaced = 0;
+  MoveCount = 0;
   placedCount = 0;
   placeElements();
   displayedCount = 0;
@@ -337,12 +364,13 @@ function newGame() {
   lost = false;
   timer = true;
 
-  move.innerHTML = numberPlaced;
+  move.innerHTML = MoveCount;
   display();
 }
 //reset
 document.getElementById("reset").addEventListener("click", () => {
   const confirmreset = confirm("Are you sure you want to reset?");
+  if (confirmreset == false) return;
   newGame();
 });
 let features = document.getElementById("features");
@@ -352,6 +380,8 @@ let pausebox = document.getElementById("pausebox");
 let timeroption = document.getElementById("timesection");
 let mistakeoption = document.getElementById("mistakesection");
 let movesoption = document.getElementById("movesection");
+
+let game_controls = document.getElementById("game-controls");
 document.getElementById("pause").addEventListener("click", () => {
   if (lost) return;
 
@@ -362,6 +392,7 @@ document.getElementById("pause").addEventListener("click", () => {
   timeroption.style.display = "none";
   mistakeoption.style.display = "none";
   movesoption.style.display = "none";
+  game_controls.style.display = "none";
   pausebox.style.display = "flex";
 });
 
@@ -374,6 +405,7 @@ resume.addEventListener("click", () => {
   timeroption.style.display = "flex";
   mistakeoption.style.display = "flex";
   movesoption.style.display = "flex";
+  game_controls.style.display = "flex";
   pausebox.style.display = "none";
 });
 
@@ -419,7 +451,7 @@ function timeup() {
   result_time_value.innerHTML =
     document.getElementById("minute").innerHTML +
     document.getElementById("second").innerHTML;
-  result_moves_value.innerHTML = numberPlaced;
+  result_moves_value.innerHTML = MoveCount;
 }
 
 // runs watch every second
