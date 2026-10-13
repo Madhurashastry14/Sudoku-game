@@ -454,5 +454,16 @@ function timeup() {
   result_moves_value.innerHTML = MoveCount;
 }
 
+let undo = document.getElementById("undo");
+let hint = document.getElementById("hint");
+
+undo.addEventListener("click", () => {
+  alert("Undo feature is not implemented yet.");
+});
+
+hint.addEventListener("click", () => {
+  alert("Hint feature is not implemented yet.");
+});
+
 // runs watch every second
 setInterval(watch, 1000);
